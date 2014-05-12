@@ -111,7 +111,7 @@ $(function () {
                     var factors = recipeFactors[input];
                     var factorsHTML = "";
                     for (var i = 0; i < factors.length; i++) {
-                        factorsHTML = factorsHTML + "<strong>" + romanNumerals[i]+ ". Factor Percent: </strong>" + parseFloat(Math.round(factors[i][1] * 100) / 100).toFixed(2) + "<br>";
+                        factorsHTML = factorsHTML + "<strong>" + parseFloat(Math.round(factors[i][1] * 100)) + "%</strong><br>";
                         console.log(topFactors[factors[i][0]]);
                         for (var j = 0; j < topFactors[factors[i][0]].length; j++) {
                             factorsHTML = factorsHTML + topFactors[factors[i][0]][j];
@@ -134,7 +134,7 @@ $(function () {
                     var ifactorsHTML = "";
                     var length = Math.min(ifactors.length, 5);
                     for (i = 0; i < length; i++) {
-                        ifactorsHTML = ifactorsHTML + "<strong>" + romanNumerals[i]+ ". Factor Percent: </strong>" + parseFloat(Math.round(ifactors[i][1] * 100) / 100).toFixed(2) + "<br>";
+                        ifactorsHTML = ifactorsHTML + "<strong>" + parseFloat(Math.round(ifactors[i][1] * 100)) + "%</strong><br>";
                         console.log(itopFactors[ifactors[i][0]]);
                         for (j = 0; j < itopFactors[ifactors[i][0]].length; j++) {
                             ifactorsHTML = ifactorsHTML + itopFactors[ifactors[i][0]][j];
