@@ -96,7 +96,7 @@ $(function () {
                 $('#box-container').css('margin-top', '-=' + height);
                 $("#ipt").animate({
                     top: "+=" + (y + ($('#recipe-box').offset().top - $('#recipe-input').offset().top) + 17) + "px",
-                    left: "+=" + (25 + x) + "px",
+                    left: "+=" + (24 + x) + "px",
                     color: "white"
                 }, 600, function() {
                     console.log("done");
@@ -116,7 +116,7 @@ $(function () {
                         for (var j = 0; j < topFactors[factors[i][0]].length; j++) {
                             factorsHTML = factorsHTML + topFactors[factors[i][0]][j];
                             if (j != topFactors[factors[i][0]].length - 1) {
-                                factorsHTML = factorsHTML + ", ";
+                                factorsHTML = factorsHTML + " <strong>&middot;</strong> ";
                             }
                         }
                         if (i != factors.length - 1) {
@@ -139,7 +139,7 @@ $(function () {
                         for (j = 0; j < itopFactors[ifactors[i][0]].length; j++) {
                             ifactorsHTML = ifactorsHTML + itopFactors[ifactors[i][0]][j];
                             if (j != itopFactors[ifactors[i][0]].length - 1) {
-                                ifactorsHTML = ifactorsHTML + ", ";
+                                ifactorsHTML = ifactorsHTML + " <strong>&middot;</strong> ";
                             }
                         }
                         if (i != ifactors.length - 1) {
