@@ -1,0 +1,48 @@
+{% extends "core/layout.html" %}
+
+{% block jsinline %}
+    <script type="text/javascript" src="/static/js/spin.js"></script>
+    <script type="text/javascript" src="/static/js/ajax-csrf.js"></script>
+    <script type="text/javascript" src="/static/js/typeahead.js"></script>
+    <script type="text/javascript" src="/static/js/recipes.js"></script>
+{% endblock %}
+
+{% block body %}
+
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="title" style="margin-top: 40px;">Interacting With Taters</h1>
+            <div class="col-md-6 col-md-offset-3">
+            <div id="bloodhound">
+                <input type="text" class="form-control" id="recipe-input" placeholder="Enter Recipe">
+                <div id="input-container"></div>
+            </div>
+            <br><br>
+            <div id="box-container">
+            <h2 class="title">Recipe Board</h2>
+            <div class="btn btn-recommend" id="btn-trash"><i class="fa fa-trash-o" id="trash-icon"></i></div>
+                <div id="recipe-box">
+
+                </div>
+            </div>
+            </div>
+
+            <div id="recommendations">
+            <div class="col-md-4">
+                <div class="btn btn-block btn-recommend" id="btn-recommend1">Ingredient and Dish Similarity (Content Based)</div>
+                <div class="recs-holder" id="recs1"></div>
+            </div>
+            <div class="col-md-4">
+                <div class="btn btn-block btn-recommend" id="btn-recommend2">Recipe Factors (Collaborative Filtering)</div>
+                <div class="recs-holder" id="recs2"></div>
+            </div>
+            <div class="col-md-4">
+                <div class="btn btn-block btn-recommend" id="btn-recommend3">Ingredient Factors (Hybrid)</div>
+                <div class="recs-holder" id="recs3"></div>
+            </div>
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}
