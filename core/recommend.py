@@ -33,14 +33,44 @@ def cosine(arr1, arr2):
 
 class ContentRecommender:
     def __init__(self, cachedFilename):
-        self.matrix = np.loadtxt(cachedFilename)
-        
+        m = np.loadtxt(cachedFilename, delimiter=',')
+        recipes = m[:,0].astype(int)
+        ingredients = m[:,1].astype(int)
+        quantities = m[:,2]
+
+        recipesToIngredientsToQuantities = {}
+        ingredientsToRecipes = {}
+
+        for i in range(len(recipes)):
+            if recipes[i] not in recipesToIngredientsToQuantities:
+                recipesToIngredientsToQuantities[recipes[i]] = {}
+            if ingredients[i] not in recipesToIngredientsToQuantities[recipes[i]]:
+                recipesToIngredientsToQuantities[recipes[i]][ingredients[i]] = quantities[i]
+
+        self.recipesToIngredientsToQuantities = recipesToIngredientsToQuantities
+
+    def myCosine(self, a, b):
+        common = [i for i in a if i in b]
+        top = np.dot( np.array([a[i] for i in common]),  np.array([b[i] for i in common]) )
+        aMag = np.linalg.norm(np.array(a.values()))
+        bMag = np.linalg.norm(np.array(b.values()))
+        return top / (aMag * bMag)
+
+    def aggregate(self, recipeBox):
+        aggregate = {}
+        for r in recipeBox:
+            for i in self.recipesToIngredientsToQuantities[r]:
+                if i not in aggregate:
+                    aggregate[i] = 0
+                aggregate[i] += self.recipesToIngredientsToQuantities[r][i]
+        return aggregate
+
     def recommend(self, recipeBox, N):
-        recipeBoxVectors = self.matrix[recipeBox]
-        userProfile = np.asarray(recipeBoxVectors.sum(0))
-        distances = np.array([cosine(userProfile, recipeVector) for recipeVector in self.matrix])
-        order = distances.argsort()
-        top = order[1:N+1] # exclude the item itself
+        numRecipes = len(self.recipesToIngredientsToQuantities)
+        userProfile = self.aggregate(recipeBox)
+        distances = np.array([self.myCosine(userProfile, self.recipesToIngredientsToQuantities[iRecipe]) for iRecipe in range(numRecipes)])
+        order = distances.argsort()[::-1]
+        top = order[0:N]
         return top
 
 class CFRecommender:
@@ -56,7 +86,7 @@ class CFRecommender:
             order = preferences.argsort()[::-1]
         elif metric == 'cosine':
             distances = np.array([cosine(userProfile, recipeVector) for recipeVector in self.recipeWeights])
-            order = distances.argsort()
+            order = distances.argsort()[::-1]
 
         top = order[0:N]
         return top
@@ -69,7 +99,7 @@ class HybridRecommender:
         recipeBoxVectors = self.recipesIFactors[recipeBox]
         userProfile = np.asarray(recipeBoxVectors.sum(0))
         distances = np.array([cosine(userProfile, recipeVector) for recipeVector in self.recipesIFactors])
-        order = distances.argsort()
+        order = distances.argsort()[::-1]
         top = order[0:N] # exclude the item itself
         return top 
 
@@ -93,7 +123,7 @@ recipeFactorsFilePath2 = os.path.join(os.path.dirname(__file__), 'data/recipeFac
 ifactorsTopFilePath2 = os.path.join(os.path.dirname(__file__), 'data/ifactorsTop.json')
 recipeIFactorsFilePath2 = os.path.join(os.path.dirname(__file__), 'data/recipeIFactors.json')
 
-#ingredientsDishMatrixFilePath = os.path.join(os.path.dirname(__file__), 'data/ingredientsDishMatrix.dat')
+ingredientsDishMatrixFilePath = os.path.join(os.path.dirname(__file__), 'data/ingredientsDishMatrix.dat')
 recipeFactorsFilePath = os.path.join(os.path.dirname(__file__), 'data/recipeWeights.dat')
 recipeIFactorsFilePath = os.path.join(os.path.dirname(__file__), 'data/recipesIFactors.dat')
 
@@ -116,7 +146,7 @@ itopFactors = [factor.split(", ") for factor in f.read().translate(None, "\"").s
 f = open(recipeIFactorsFilePath2)
 recipeIFactors = json.loads(f.read())
 
-#content = ContentRecommender(ingredientsDishMatrixFilePath)
+content = ContentRecommender(ingredientsDishMatrixFilePath)
 cf = CFRecommender(recipeFactorsFilePath)
 hybrid = HybridRecommender(recipeIFactorsFilePath)
 

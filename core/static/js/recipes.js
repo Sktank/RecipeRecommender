@@ -38,6 +38,10 @@ $(function () {
                 recipeFactors = list.recipeFactors;
                 itopFactors = list.itopFactors;
                 recipeIFactors = list.recipeIFactors;
+
+                $("#recipe-input").prop("disabled", false);
+                $("#recipe-input").prop("placeholder", "Enter Recipe");
+
                 return $.map(list.names.names, function(recipe) { return { name: recipe }; });
             }
         }
